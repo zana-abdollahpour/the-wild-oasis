@@ -7,6 +7,7 @@ import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
+import Empty from "../../ui/Empty";
 
 const TableHeader = styled.header`
   display: grid;
@@ -28,7 +29,9 @@ function CabinTable() {
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
+  if (!cabins.length) return <Empty resource="Cabins" />;
 
+  // 1. Filtering
   const filterValue = searchParams.get("discount") || "all";
 
   let filteredCabins;
@@ -37,6 +40,14 @@ function CabinTable() {
     filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
   if (filterValue === "with-discount")
     filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
+
+  // 2. Sorting
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const [field, dircetion] = sortBy.split("-");
+  const modifier = dircetion === "asc" ? 1 : -1;
+  const sortedCabins = filteredCabins.sort(
+    (a, b) => modifier * (a[field] - b[field])
+  );
 
   return (
     <Menus>
@@ -50,7 +61,7 @@ function CabinTable() {
           <div></div>
         </TableHeader>
         <Table.Body
-          data={filteredCabins}
+          data={sortedCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
