@@ -128,9 +128,11 @@ function Uploader() {
   return (
     <div
       style={{
+        fontSize: "1.4rem",
+        color: "gray",
         marginTop: "auto",
         backgroundColor: "#e0e7ff",
-        padding: "8px",
+        padding: "4px",
         borderRadius: "5px",
         textAlign: "center",
         display: "flex",
@@ -138,7 +140,7 @@ function Uploader() {
         gap: "8px",
       }}
     >
-      <h3>SAMPLE DATA</h3>
+      <h3>Use these for test</h3>
 
       <Button onClick={uploadAll} disabled={isLoading}>
         Upload ALL
