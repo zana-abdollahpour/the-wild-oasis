@@ -9,7 +9,7 @@ export function useCheckout() {
   const { mutate: checkout, isLoading: isCheckingOut } = useMutation({
     mutationFn: (bookingId) =>
       updateBooking(bookingId, {
-        status: "checked-in",
+        status: "checked-out",
       }),
 
     onSuccess: (data) => {
