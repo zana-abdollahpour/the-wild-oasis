@@ -1,8 +1,7 @@
-// import { useState } from "react";
-import { useEffect } from "react";
+import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
 import supabase from "../services/supabase";
-// import Button from "../ui/Button";
+import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
 
 import { bookings } from "./data-bookings";
@@ -102,10 +101,10 @@ async function createBookings() {
 }
 
 function Uploader() {
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function uploadAll() {
-    // setIsLoading(true);
+    setIsLoading(true);
     // Bookings need to be deleted FIRST
     await deleteBookings();
     await deleteGuests();
@@ -116,48 +115,40 @@ function Uploader() {
     await createCabins();
     await createBookings();
 
-    // setIsLoading(false);
+    setIsLoading(false);
   }
 
-  useEffect(() => {
-    if (new Date().getDay() === 1 || new Date().getDay() === 4) uploadAll();
-  }, []);
+  async function uploadBookings() {
+    setIsLoading(true);
+    await deleteBookings();
+    await createBookings();
+    setIsLoading(false);
+  }
 
-  // async function uploadBookings() {
-  //   setIsLoading(true);
-  //   await deleteBookings();
-  //   await createBookings();
-  //   setIsLoading(false);
-  // }
+  return (
+    <div
+      style={{
+        marginTop: "auto",
+        backgroundColor: "#e0e7ff",
+        padding: "8px",
+        borderRadius: "5px",
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+      }}
+    >
+      <h3>SAMPLE DATA</h3>
 
-  return null;
+      <Button onClick={uploadAll} disabled={isLoading}>
+        Upload ALL
+      </Button>
 
-  // return (
-  //   <div
-  //     style={{
-  //       fontSize: "1.4rem",
-  //       color: "gray",
-  //       marginTop: "auto",
-  //       backgroundColor: "#e0e7ff",
-  //       padding: "4px",
-  //       borderRadius: "5px",
-  //       textAlign: "center",
-  //       display: "flex",
-  //       flexDirection: "column",
-  //       gap: "8px",
-  //     }}
-  //   >
-  //     <h3>Use these for test</h3>
-
-  //     <Button onClick={uploadAll} disabled={isLoading}>
-  //       Upload ALL
-  //     </Button>
-
-  //     <Button onClick={uploadBookings} disabled={isLoading}>
-  //       Upload bookings ONLY
-  //     </Button>
-  //   </div>
-  // );
+      <Button onClick={uploadBookings} disabled={isLoading}>
+        Upload bookings ONLY
+      </Button>
+    </div>
+  );
 }
 
 export default Uploader;
